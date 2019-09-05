@@ -18,7 +18,7 @@ def process_group_step(message):
         return
     user = db.Users.create(tg_username=message.from_user.username, tg_id=message.from_user.id, id_group=int(text))
     db.commit()
-    msg = bot.send_message(chat_id, 'Я все созхранил')
+    msg = bot.send_message(chat_id, 'Я все сохранил')
     bot.register_next_step_handler(msg, start_command)
 
 
@@ -39,3 +39,4 @@ def start_command(message):
             ]
         ))
         bot.register_next_step_handler(msg, process_group_step)
+    msg = bot.send_message(tg_id, "Привет, {name}!\nЧем займемся сегодня?".format(name=row.tg_username))
