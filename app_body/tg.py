@@ -23,13 +23,12 @@ def start_command(message):
     if not row:
         rows = db.Groups.all()
         print(rows)
-        msg = bot.reply_to(message, """\
-        Привет, кажется ты еще не зарегистрирован
-        Выбери свою группу:
-        """+'\n'.join(
+        msg = bot.reply_to(message, "\
+        Привет, кажется ты еще не зарегистрирован\n \
+        Выбери свою группу:" + '\n'.join(
             [
-                '{id} - > {name}'.format(id=group.id, name=group.name) for group in rows
+                '{id} - > {name}'.format(id=group.id, name=group.name)
+                for group in rows
             ]
-        )+"""
-        """)
+        ))
         bot.register_next_step_handler(msg, process_group_step)
