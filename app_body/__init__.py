@@ -9,3 +9,4 @@ from .tg import bot
 from .routes import app
 debug = os.environ.get('DATABASE_URL') is None
 db.set_session()
+admin_group = db.Groups.query.filter_by(name='Преподаватели').first()

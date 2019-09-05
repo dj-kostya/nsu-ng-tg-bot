@@ -1,13 +1,13 @@
 import calendar
 from datetime import datetime, timedelta
 
-from app_body import Contants, db
+from app_body import Contants, db, admin_group
 
 import telebot
 from sqlalchemy.sql import func, and_
 
 bot = telebot.TeleBot(Contants.TG_BOT_TOKEN)
-admin_group = db.Groups.query.filter_by(name='Преподаватели').first()
+
 
 def process_group_step(message):
     chat_id = message.chat.id
@@ -20,7 +20,9 @@ def process_group_step(message):
         msg = bot.send_message(chat_id, 'Неверная группа')
         bot.register_next_step_handler(msg, process_group_step)
         return
-    user = db.Users.create(tg_username=message.from_user.username if message.from_user.username else message.from_user.id, tg_id=message.from_user.id, id_group=int(text))
+    user = db.Users.create(
+        tg_username=message.from_user.username if message.from_user.username else message.from_user.id,
+        tg_id=message.from_user.id, id_group=int(text))
     db.commit()
     msg = bot.send_message(chat_id, 'Я все сохранил')
     start_command(message)
@@ -105,7 +107,8 @@ def get_user_stat(m):
 
         msg = bot.send_message(tg_id,
                                "За период с {start_dt} по {end_dt} {appeal}: {total} км\n"
-                               "Из них максимальная дистанция: {max} км".format(appeal='вы пробежали' if user.id_group == admin_group.id else 'ты пробежал',
+                               "Из них максимальная дистанция: {max} км".format(
+                                   appeal='вы пробежали' if user.id_group == admin_group.id else 'ты пробежал',
                                    total=row[0] if row[0] else 0, max=row[1] if row[1] else 0,
                                    start_dt=start.strftime('%Y-%m-%d'), end_dt=end.strftime('%Y-%m-%d'), )
                                , reply_markup=keyboard)
@@ -166,7 +169,8 @@ def main_page(m):
     keyboard.add(*[telebot.types.KeyboardButton(name) for name in ['Вернуться на главную!']])
     if m.text == 'Я побегал!':
 
-        msg = bot.send_message(tg_id, "Сколько км {appeal} пробежал за сегодня? ".format(appeal='вы' if user.id_group == admin_group.id else 'ты'),
+        msg = bot.send_message(tg_id, "Сколько км {appeal} пробежал за сегодня? ".format(
+            appeal='вы' if user.id_group == admin_group.id else 'ты'),
                                reply_markup=keyboard)
         bot.register_next_step_handler(msg, save_run)
 
@@ -181,6 +185,7 @@ def main_page(m):
                                reply_markup=keyboard)
         bot.register_next_step_handler(msg, save_run)
     else:
-        msg = bot.send_message(tg_id, "По-моему, {appeal}!".format(appeal='вы ошиблись' if user.id_group == admin_group.id else 'ты ошибся'),
+        msg = bot.send_message(tg_id, "По-моему, {appeal}!".format(
+            appeal='вы ошиблись' if user.id_group == admin_group.id else 'ты ошибся'),
                                reply_markup=keyboard)
         bot.register_next_step_handler(msg, start_command)
