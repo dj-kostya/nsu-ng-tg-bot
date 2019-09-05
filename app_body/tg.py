@@ -158,7 +158,6 @@ def get_all_stat(m):
         main_page(m)
 
 
-@bot.message_handler(content_types=['text'])
 def main_page(m):
     global admin_group
     tg_id = m.from_user.id
