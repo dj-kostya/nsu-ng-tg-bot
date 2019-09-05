@@ -3,7 +3,7 @@ from datetime import datetime
 from app_body import Contants, db
 
 import telebot
-from sqlalchemy.sql import func
+from sqlalchemy.sql import func, and_
 
 bot = telebot.TeleBot(Contants.TG_BOT_TOKEN)
 
@@ -70,6 +70,7 @@ def save_run(m):
 
 def main_page(m):
     tg_id = m.from_user.id
+    user = db.Users.query.filter_by(tg_id=tg_id).first()
     if m.text == 'Я побегал!':
         keyboard = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
         keyboard.add(*[telebot.types.KeyboardButton(name) for name in ['Вернуться на главную!']])
@@ -85,7 +86,10 @@ def main_page(m):
 
         row = db.session.query(func.sum(db.RunHistory.total).label("total"),
                                func.max(db.RunHistory.total).label("max")).filter(
-            db.RunHistory.sh_dt >= datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)).first()
+            and_(
+                db.RunHistory.sh_dt >= datetime.now().replace(hour=0, minute=0, second=0, microsecond=0),
+                db.RunHistory.id_user == user.id
+            )).first()
 
         msg = bot.send_message(tg_id, "За сегодня ты пробежал: {total} км\nИз них максимальная дистанция: {max}".format(
             total=row[0], max=row[1]),
