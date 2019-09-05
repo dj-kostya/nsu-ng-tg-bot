@@ -99,7 +99,7 @@ def main_page(m):
                                "За сегодня ты пробежал: {total} км\nИз них максимальная дистанция: {max} км".format(
                                    total=row[0] if row[0] else 0, max=row[1] if row[1] else 0),
                                reply_markup=keyboard)
-        bot.register_next_step_handler(msg, save_run)
+        bot.register_next_step_handler(msg, main_page)
     elif m.text == 'за неделю':
         keyboard = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
         keyboard.add(
@@ -120,6 +120,6 @@ def main_page(m):
                                "За период с {start_dt} по {end_dt} ты пробежал: {total} км\n"
                                "Из них максимальная дистанция: {max} км".format(
                                    total=row[0] if row[0] else 0, max=row[1] if row[1] else 0,
-                                   start_dt=start.strftime('%Y-%m-%d'), end_dt=end.strftime('%Y-%m-%d'), ),
-                               reply_markup=keyboard)
+                                   start_dt=start.strftime('%Y-%m-%d'), end_dt=end.strftime('%Y-%m-%d'), )
+                               , reply_markup=keyboard)
         bot.register_next_step_handler(msg, save_run)
