@@ -61,6 +61,7 @@ def save_run(m):
     elif text.isdigit():
         db.RunHistory.create(id_user=user.id, total=float(text))
         msg = bot.send_message(tg_id, 'Я все сохранил!')
+        db.commit()
         start_command(m)
     else:
         msg = bot.send_message(tg_id, 'Укажи циферку в км')
@@ -84,7 +85,7 @@ def main_page(m):
 
         row = db.session.query(func.sum(db.RunHistory.total).label("total"),
                                func.max(db.RunHistory.total).label("max")).filter(
-            db.RunHistory.sh_dt >= datetime.now().replace(hour=0, minute=0, second=0, microsecond=0))
+            db.RunHistory.sh_dt >= datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)).all()
         print(row)
         msg = bot.send_message(tg_id, "Сколько км ты пробежал за сегодня? ",
                                reply_markup=keyboard)
