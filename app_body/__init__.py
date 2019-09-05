@@ -7,5 +7,5 @@ from .BD import db
 
 from .tg import bot
 from .routes import app
-debug = os.environ.get('DATABASE_URL') is not None
+debug = os.environ.get('DATABASE_URL') is None
 db.set_session()

@@ -66,7 +66,7 @@ class RunHistory(BaseModel):
 
 
 abs_path = os.path.abspath(os.path.dirname(__file__))
-debug = os.environ.get('DATABASE_URL') is not None
+debug = os.environ.get('DATABASE_URL') is None
 if debug:
     engine = sa.create_engine('sqlite:///' + os.path.join(abs_path, 'sqlite/app_body.db'), echo=True)
 else:
