@@ -7,6 +7,7 @@ bot = telebot.TeleBot(Contants.TG_BOT_TOKEN)
 
 def process_group_step(message):
     try:
+        print(message)
         rows = db.Groups.all()
         msg = bot.reply_to(message, "\
                 Привет, кажется ты еще не зарегистрирован\nВыбери свою группу:" + '\n'.join(
