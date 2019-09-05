@@ -73,16 +73,9 @@ def save_run(m):
         bot.register_next_step_handler(msg, save_run)
 
 
-def main_page(m):
+def get_stat(m):
     tg_id = m.from_user.id
     user = db.Users.query.filter_by(tg_id=tg_id).first()
-    if m.text == 'Я побегал!':
-        keyboard = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
-        keyboard.add(*[telebot.types.KeyboardButton(name) for name in ['Вернуться на главную!']])
-        msg = bot.send_message(tg_id, "Сколько км ты пробежал за сегодня? ",
-                               reply_markup=keyboard)
-        bot.register_next_step_handler(msg, save_run)
-
     if m.text == 'Получить свою статистику' or m.text == 'за сегодня' or m.text == 'за неделю' or m.text == 'за месяц' \
             or m.text == 'за все время':
         keyboard = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
@@ -116,4 +109,25 @@ def main_page(m):
                                    total=row[0] if row[0] else 0, max=row[1] if row[1] else 0,
                                    start_dt=start.strftime('%Y-%m-%d'), end_dt=end.strftime('%Y-%m-%d'), )
                                , reply_markup=keyboard)
-        bot.register_next_step_handler(msg, main_page)
+        bot.register_next_step_handler(msg, get_stat)
+
+
+@bot.message_handler(content_types=['text'])
+def main_page(m):
+    tg_id = m.from_user.id
+    user = db.Users.query.filter_by(tg_id=tg_id).first()
+    if m.text == 'Я побегал!':
+        keyboard = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
+        keyboard.add(*[telebot.types.KeyboardButton(name) for name in ['Вернуться на главную!']])
+        msg = bot.send_message(tg_id, "Сколько км ты пробежал за сегодня? ",
+                               reply_markup=keyboard)
+        bot.register_next_step_handler(msg, save_run)
+
+    elif m.text == 'Получить свою статистику':
+        get_stat(m)
+    else:
+        keyboard = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
+        keyboard.add(*[telebot.types.KeyboardButton(name) for name in ['Вернуться на главную!']])
+        msg = bot.send_message(tg_id, "По-моему, ты ошибся!",
+                               reply_markup=keyboard)
+        bot.register_next_step_handler(msg, start_command)
