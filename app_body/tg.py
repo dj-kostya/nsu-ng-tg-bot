@@ -63,13 +63,13 @@ def save_run(m):
         total = None
     if m.text == 'Вернуться на главную!':
         start_command(m)
-    elif total:
+    elif total and total > 0:
         db.RunHistory.create(id_user=user.id, total=total)
         msg = bot.send_message(tg_id, 'Я все сохранил!')
         db.commit()
         start_command(m)
     else:
-        msg = bot.send_message(tg_id, 'Укажи циферку в км')
+        msg = bot.send_message(tg_id, 'Укажи положительную циферку в км')
         bot.register_next_step_handler(msg, save_run)
 
 
