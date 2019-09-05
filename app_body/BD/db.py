@@ -1,6 +1,6 @@
 import os
 from datetime import datetime
-
+from app_body import debug, Contants
 import sqlalchemy as sa
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
@@ -66,7 +66,10 @@ class RunHistory(BaseModel):
 
 
 abs_path = os.path.abspath(os.path.dirname(__file__))
-engine = sa.create_engine('sqlite:///' + os.path.join(abs_path, 'sqlite/app_body.db'), echo=True)
+if debug:
+    engine = sa.create_engine('sqlite:///' + os.path.join(abs_path, 'sqlite/app_body.db'), echo=True)
+else:
+    engine = sa.create_engine(Contants.HEROKU_URL, echo=True)
 session = scoped_session(sessionmaker(bind=engine))
 
 
