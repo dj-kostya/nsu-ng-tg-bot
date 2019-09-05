@@ -52,7 +52,7 @@ class Users(BaseModel):
     tg_username = sa.Column(sa.String)
     tg_id = sa.Column(sa.Integer)
     sh_dt = sa.Column(sa.DateTime, default=datetime.now())
-    id_role = sa.Column(sa.Integer, sa.ForeignKey('Roles.id'))
+    #id_role = sa.Column(sa.Integer, sa.ForeignKey('Roles.id'))
     id_group = sa.Column(sa.Integer, sa.ForeignKey('Groups.id'))
 
 
