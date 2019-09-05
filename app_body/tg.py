@@ -44,4 +44,29 @@ def start_command(message):
     admin_group = db.Groups.query.filter_by(name='Преподаватели').first()
     if row.id_group == admin_group.id:
         keyboard.add(*[telebot.types.KeyboardButton(name) for name in ['Получить статистику']])
-    msg = bot.send_message(tg_id, "Привет, {name}!\nЧем займемся сегодня?".format(name=row.tg_username), reply_markup=keyboard)
+    msg = bot.send_message(tg_id, "Привет, {name}!\nЧем займемся сегодня?".format(name=row.tg_username),
+                           reply_markup=keyboard)
+    bot.register_next_step_handler(msg, main_page)
+
+
+def save_run(m):
+    tg_id = m.from_user.id
+    text = m.text.replace(',', '.')
+    user = db.Users.query.filter_by(tg_id=tg_id).first()
+    if m.text == 'Вернуться на главную!':
+        start_command(m)
+    elif text.isdigit():
+        db.RunHistory.create(id_user=user.id, total=float(text))
+    else:
+        msg = bot.send_message(tg_id, 'Укажи циферку в км')
+        bot.register_next_step_handler(msg, save_run)
+
+
+def main_page(m):
+    tg_id = m.from_user.id
+    if m.text == 'Я побегал!':
+        keyboard = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
+        keyboard.add(*[telebot.types.KeyboardButton(name) for name in ['Вернуться на главную!']])
+        msg = bot.send_message(tg_id, "Сколько км ты пробежал за сегодня? ",
+                               reply_markup=keyboard)
+        bot.register_next_step_handler(msg, main_page)
