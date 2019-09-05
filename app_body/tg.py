@@ -73,7 +73,7 @@ def save_run(m):
         bot.register_next_step_handler(msg, save_run)
 
 
-def get_stat(m):
+def get_user_stat(m):
     tg_id = m.from_user.id
     user = db.Users.query.filter_by(tg_id=tg_id).first()
     if m.text == 'Получить свою статистику' or m.text == 'за сегодня' or m.text == 'за неделю' or m.text == 'за месяц' \
@@ -109,7 +109,49 @@ def get_stat(m):
                                    total=row[0] if row[0] else 0, max=row[1] if row[1] else 0,
                                    start_dt=start.strftime('%Y-%m-%d'), end_dt=end.strftime('%Y-%m-%d'), )
                                , reply_markup=keyboard)
-        bot.register_next_step_handler(msg, get_stat)
+        bot.register_next_step_handler(msg, get_user_stat)
+    elif m.text == 'Вернуться на главную!':
+        start_command(m)
+    else:
+        main_page(m)
+
+
+def get_all_stat(m):
+    tg_id = m.from_user.id
+    user = db.Users.query.filter_by(tg_id=tg_id).first()
+    if m.text == 'Получить статистику' or m.text == 'за сегодня' or m.text == 'за неделю' or m.text == 'за месяц' \
+            or m.text == 'за все время':
+        keyboard = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
+        keyboard.add(
+            *[telebot.types.KeyboardButton(name) for name in
+              ['за месяц', 'за неделю',
+               'за сегодня', 'за все время', 'Вернуться на главную!']])
+        dt = datetime.now()
+        if m.text == 'Получить свою статистику' or m.text == 'за сегодня':
+            start = dt.replace(hour=0, minute=0, second=0, microsecond=0)
+            end = start + timedelta(days=1) - timedelta(seconds=1)
+        elif m.text == 'за неделю':
+            start = dt - timedelta(days=dt.weekday())
+            end = start + timedelta(days=6)
+        elif m.text == 'за месяц':
+            start = dt.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+            end = start + timedelta(days=calendar.monthrange(dt.year, dt.month)[1] - 1)
+        else:
+            start = dt.replace(year=2000)
+            end = dt.replace(year=3000)
+        row = db.session.query(func.sum(db.RunHistory.total).label("total"),
+                               func.max(db.RunHistory.total).label("max")).filter(
+            and_(
+                db.RunHistory.sh_dt >= start, db.RunHistory.sh_dt <= end)
+        ).first()
+
+        msg = bot.send_message(tg_id,
+                               "За период с {start_dt} по {end_dt} все пробежали: {total} км\n"
+                               "Из них максимальная дистанция : {max} км".format(
+                                   total=row[0] if row[0] else 0, max=row[1] if row[1] else 0,
+                                   start_dt=start.strftime('%Y-%m-%d'), end_dt=end.strftime('%Y-%m-%d'))
+                               , reply_markup=keyboard)
+        bot.register_next_step_handler(msg, get_user_stat)
     elif m.text == 'Вернуться на главную!':
         start_command(m)
     else:
@@ -128,7 +170,9 @@ def main_page(m):
         bot.register_next_step_handler(msg, save_run)
 
     elif m.text == 'Получить свою статистику':
-        get_stat(m)
+        get_user_stat(m)
+    elif m.text == 'Получить статистику':
+
     else:
         keyboard = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
         keyboard.add(*[telebot.types.KeyboardButton(name) for name in ['Вернуться на главную!']])
