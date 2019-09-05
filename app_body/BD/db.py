@@ -61,7 +61,7 @@ class RunHistory(BaseModel):
     __repr_attrs__ = ['id', 'id_user']
     id = sa.Column(sa.Integer, primary_key=True)
     id_user = sa.Column(sa.Integer, sa.ForeignKey('Users.id'))
-    total = sa.Column(sa.Integer)
+    total = sa.Column(sa.Float)
     sh_dt = sa.Column(sa.DateTime, default=datetime.now())
 
 
