@@ -185,8 +185,8 @@ def main_page(m):
                 total=abs(Contants.RUN_ALL - total_run[0])),
                                    reply_markup=keyboard)
         else:
-            msg = bot.send_message(tg_id, "Сколько км {appeal} осталось пробежать: {total} км. !".format(
-                appeal='вам' if user.id_group == admin_group.id else 'тебе',
+            msg = bot.send_message(tg_id, "{appeal} осталось пробежать: {total} км. !".format(
+                appeal='Вам' if user.id_group == admin_group.id else 'Тебе',
                 total=Contants.RUN_ALL - total_run[0]),
                                    reply_markup=keyboard)
         bot.register_next_step_handler(msg, start_command)
