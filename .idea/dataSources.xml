@@ -10,5 +10,11 @@
         <property name="enable_load_extension" value="true" />
       </driver-properties>
     </data-source>
+    <data-source source="LOCAL" name="dbhtjhshau6f6s@ec2-174-129-27-3.compute-1.amazonaws.com" uuid="4cb6815b-8e1f-4874-ad8f-c3e138a96dbc">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://ec2-174-129-27-3.compute-1.amazonaws.com:5432/dbhtjhshau6f6s</jdbc-url>
+    </data-source>
   </component>
 </project>

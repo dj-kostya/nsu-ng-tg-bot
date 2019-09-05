@@ -110,6 +110,10 @@ def get_stat(m):
                                    start_dt=start.strftime('%Y-%m-%d'), end_dt=end.strftime('%Y-%m-%d'), )
                                , reply_markup=keyboard)
         bot.register_next_step_handler(msg, get_stat)
+    elif m.text == 'Вернуться на главную!':
+        start_command(m)
+    else:
+        main_page(m)
 
 
 @bot.message_handler(content_types=['text'])
