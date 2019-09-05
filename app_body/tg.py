@@ -22,7 +22,7 @@ def process_group_step(message):
     user = db.Users.create(tg_username=message.from_user.username, tg_id=message.from_user.id, id_group=int(text))
     db.commit()
     msg = bot.send_message(chat_id, 'Я все сохранил')
-    bot.register_next_step_handler(msg, start_command)
+    start_command(message)
 
 
 @bot.message_handler(commands=['start'])
