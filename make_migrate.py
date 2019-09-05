@@ -31,6 +31,7 @@ if __name__ == '__main__':
     db.set_session()
     if args.drop_data:
         db.RunHistory.query.delete()
+        db.commit()
     create_groups()
     create_permission()
     db.commit()
