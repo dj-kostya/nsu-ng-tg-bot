@@ -22,11 +22,15 @@ def create_permission():
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("--drop", action="store_true", dest='drop')
+    parser.add_argument("--drop-data", action="store_true", dest='drop_data')
     args = parser.parse_args()
     if args.drop:
+
         db.drop_all()
         db.create_all()
     db.set_session()
+    if args.drop_data:
+        db.RunHistory.query().delete()
     create_groups()
     create_permission()
     db.commit()
