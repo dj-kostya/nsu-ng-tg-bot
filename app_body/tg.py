@@ -172,7 +172,7 @@ def main_page(m):
     elif m.text == 'Получить свою статистику':
         get_user_stat(m)
     elif m.text == 'Получить статистику':
-
+        get_all_stat(m)
     else:
         keyboard = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
         keyboard.add(*[telebot.types.KeyboardButton(name) for name in ['Вернуться на главную!']])
