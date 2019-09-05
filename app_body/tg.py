@@ -56,10 +56,11 @@ def save_run(m):
     tg_id = m.from_user.id
     text = m.text.replace(',', '.')
     user = db.Users.query.filter_by(tg_id=tg_id).first()
+    total = float(text)
     if m.text == 'Вернуться на главную!':
         start_command(m)
-    elif text.isdigit():
-        db.RunHistory.create(id_user=user.id, total=float(text))
+    elif total:
+        db.RunHistory.create(id_user=user.id, total=total)
         msg = bot.send_message(tg_id, 'Я все сохранил!')
         db.commit()
         start_command(m)
@@ -91,7 +92,7 @@ def main_page(m):
                 db.RunHistory.id_user == user.id
             )).first()
 
-        msg = bot.send_message(tg_id, "За сегодня ты пробежал: {total} км\nИз них максимальная дистанция: {max}".format(
+        msg = bot.send_message(tg_id, "За сегодня ты пробежал: {total} км\nИз них максимальная дистанция: {max} км".format(
             total=row[0], max=row[1]),
                                reply_markup=keyboard)
         bot.register_next_step_handler(msg, save_run)
