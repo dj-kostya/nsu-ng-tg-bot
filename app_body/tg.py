@@ -44,7 +44,7 @@ def start_command(message):
         bot.register_next_step_handler(msg, process_group_step)
     keyboard = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
     keyboard.add(*[telebot.types.KeyboardButton(name) for name in ['Я побегал!', 'Получить свою статистику']])
-    admin_group = db.session.query.filter_by(name='Преподаватели').first()
+    admin_group = db.Groups.query.filter_by(name='Преподаватели').first()
     if row.id_group == admin_group.id:
         keyboard.add(*[telebot.types.KeyboardButton(name) for name in ['Получить статистику']])
     msg = bot.send_message(tg_id, "Привет, {name}!\nЧем займемся сегодня?".format(name=row.tg_username),
@@ -82,7 +82,7 @@ def main_page(m):
               ['Вернуться на главную!', 'Получить статистику за месяц', 'Получить статистику за неделю',
                'Получить статистику за сегодня', 'Получить статистику за конкретный день']])
 
-        row = db.RunHistory.query(func.sum(db.RunHistory.total).label("total"),
+        row = db.session.query(func.sum(db.RunHistory.total).label("total"),
                                   func.max(db.RunHistory.total).label("max")).filter(
             db.RunHistory.sh_dt >= datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)).first()
         print(row)
