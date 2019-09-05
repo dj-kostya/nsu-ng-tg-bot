@@ -71,4 +71,4 @@ def main_page(m):
         keyboard.add(*[telebot.types.KeyboardButton(name) for name in ['Вернуться на главную!']])
         msg = bot.send_message(tg_id, "Сколько км ты пробежал за сегодня? ",
                                reply_markup=keyboard)
-        bot.register_next_step_handler(msg, main_page)
+        bot.register_next_step_handler(msg, save_run)
