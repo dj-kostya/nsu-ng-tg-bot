@@ -58,7 +58,7 @@ def save_run(m):
     elif text.isdigit():
         db.RunHistory.create(id_user=user.id, total=float(text))
         msg = bot.send_message(tg_id, 'Я все сохранил!')
-        bot.register_next_step_handler(msg, start_command)
+        start_command(m)
     else:
         msg = bot.send_message(tg_id, 'Укажи циферку в км')
         bot.register_next_step_handler(msg, save_run)
