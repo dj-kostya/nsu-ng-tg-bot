@@ -116,4 +116,4 @@ def main_page(m):
                                    total=row[0] if row[0] else 0, max=row[1] if row[1] else 0,
                                    start_dt=start.strftime('%Y-%m-%d'), end_dt=end.strftime('%Y-%m-%d'), )
                                , reply_markup=keyboard)
-        bot.register_next_step_handler(msg, save_run)
+        bot.register_next_step_handler(msg, main_page)
