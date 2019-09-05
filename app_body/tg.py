@@ -180,7 +180,8 @@ def main_page(m):
         print(admin_group.id, user.id_group)
         total_run = db.session.query(func.sum(db.RunHistory.total).label("total")).first
         msg = bot.send_message(tg_id, "Сколько км {appeal} осталось пробежать: {total} км. !".format(
-            appeal='вам' if user.id_group == admin_group.id else 'тебе', total=Contants.RUN_ALL - total_run[0]),
+            appeal='вам' if user.id_group == admin_group.id else 'тебе',
+            total=Contants.RUN_ALL - total_run[0]),
                                reply_markup=keyboard)
         bot.register_next_step_handler(msg, save_run)
     else:
