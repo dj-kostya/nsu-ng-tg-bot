@@ -189,3 +189,11 @@ def main_page(m):
             appeal='вы ошиблись' if user.id_group == admin_group.id else 'ты ошибся'),
                                reply_markup=keyboard)
         bot.register_next_step_handler(msg, start_command)
+
+
+admin_group = None
+
+
+def init():
+    global admin_group
+    admin_group = db.Groups.query.filter_by(name='Преподаватели').first()
