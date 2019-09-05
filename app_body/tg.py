@@ -28,5 +28,12 @@ def start_command(message):
     print(tg_id)
     row = db.Users.query.filter_by(tg_id=tg_id).first()
     if not row:
-        msg = bot.send_message(tg_id, 'Привет, %s' % message.from_user.username)
+        rows = db.Groups.all()
+        msg = bot.reply_to(message, "\
+                        Привет, кажется ты еще не зарегистрирован\nВыбери свою группу:" + '\n'.join(
+            [
+                '{id} - > {name}'.format(id=group.id, name=group.name)
+                for group in rows
+            ]
+        ))
         bot.register_next_step_handler(msg, process_group_step)
