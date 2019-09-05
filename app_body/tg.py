@@ -7,7 +7,7 @@ import telebot
 from sqlalchemy.sql import func, and_
 
 bot = telebot.TeleBot(Contants.TG_BOT_TOKEN)
-
+admin_group = db.Groups.query.filter_by(name='Преподаватели').first()
 
 def process_group_step(message):
     chat_id = message.chat.id
@@ -44,8 +44,8 @@ def start_command(message):
         ))
         bot.register_next_step_handler(msg, process_group_step)
     keyboard = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
-    keyboard.add(*[telebot.types.KeyboardButton(name) for name in ['Я побегал!', 'Получить свою статистику']])
-    admin_group = db.Groups.query.filter_by(name='Преподаватели').first()
+    keyboard.add(*[telebot.types.KeyboardButton(name) for name in
+                   ['Я побегал!', 'Получить свою статистику', 'Сколько мне еще бегать?']])
     if row.id_group == admin_group.id:
         keyboard.add(*[telebot.types.KeyboardButton(name) for name in ['Получить статистику']])
     msg = bot.send_message(tg_id, "Привет, {name}!\nЧем займемся сегодня?".format(name=row.tg_username),
@@ -104,8 +104,8 @@ def get_user_stat(m):
             )).first()
 
         msg = bot.send_message(tg_id,
-                               "За период с {start_dt} по {end_dt} ты пробежал: {total} км\n"
-                               "Из них максимальная дистанция: {max} км".format(
+                               "За период с {start_dt} по {end_dt} {appeal}: {total} км\n"
+                               "Из них максимальная дистанция: {max} км".format(appeal='вы пробежали' if user.id_group == admin_group.id else 'ты пробежал',
                                    total=row[0] if row[0] else 0, max=row[1] if row[1] else 0,
                                    start_dt=start.strftime('%Y-%m-%d'), end_dt=end.strftime('%Y-%m-%d'), )
                                , reply_markup=keyboard)
@@ -165,7 +165,7 @@ def main_page(m):
     if m.text == 'Я побегал!':
         keyboard = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
         keyboard.add(*[telebot.types.KeyboardButton(name) for name in ['Вернуться на главную!']])
-        msg = bot.send_message(tg_id, "Сколько км ты пробежал за сегодня? ",
+        msg = bot.send_message(tg_id, "Сколько км {appeal} пробежал за сегодня? ".format(appeal='вы' if user.id_group == admin_group.id else 'ты'),
                                reply_markup=keyboard)
         bot.register_next_step_handler(msg, save_run)
 
@@ -173,9 +173,10 @@ def main_page(m):
         get_user_stat(m)
     elif m.text == 'Получить статистику':
         get_all_stat(m)
+    elif m.text == ''
     else:
         keyboard = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
         keyboard.add(*[telebot.types.KeyboardButton(name) for name in ['Вернуться на главную!']])
-        msg = bot.send_message(tg_id, "По-моему, ты ошибся!",
+        msg = bot.send_message(tg_id, "По-моему, {appeal}!".format(appeal='вы ошиблись' if user.id_group == admin_group.id else 'ты ошибся'),
                                reply_markup=keyboard)
         bot.register_next_step_handler(msg, start_command)
