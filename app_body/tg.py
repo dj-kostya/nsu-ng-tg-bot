@@ -75,15 +75,15 @@ def main_page(m):
         msg = bot.send_message(tg_id, "Сколько км ты пробежал за сегодня? ",
                                reply_markup=keyboard)
         bot.register_next_step_handler(msg, save_run)
-    elif m.text == 'Получить свою статистику' or m.text == 'Получить статистику за сегодня':
+    elif m.text == 'Получить свою статистику' or m.text == 'за сегодня':
         keyboard = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
         keyboard.add(
             *[telebot.types.KeyboardButton(name) for name in
-              ['Вернуться на главную!', 'Получить статистику за месяц', 'Получить статистику за неделю',
-               'Получить статистику за сегодня', 'Получить статистику за конкретный день']])
+              ['за месяц', 'за неделю',
+               'за сегодня', 'за конкретный день', 'Вернуться на главную!']])
 
         row = db.session.query(func.sum(db.RunHistory.total).label("total"),
-                                  func.max(db.RunHistory.total).label("max")).filter(
+                               func.max(db.RunHistory.total).label("max")).filter(
             db.RunHistory.sh_dt >= datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)).first()
         print(row)
         msg = bot.send_message(tg_id, "Сколько км ты пробежал за сегодня? ",
