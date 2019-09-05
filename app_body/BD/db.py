@@ -66,11 +66,11 @@ class RunHistory(BaseModel):
 
 
 abs_path = os.path.abspath(os.path.dirname(__file__))
-debug = os.environ.get('HEROKU') is not None
+debug = os.environ.get('DATABASE_URL') is not None
 if debug:
     engine = sa.create_engine('sqlite:///' + os.path.join(abs_path, 'sqlite/app_body.db'), echo=True)
 else:
-    engine = sa.create_engine(Contants.HEROKU_URL, echo=True)
+    engine = sa.create_engine(os.environ.get('DATABASE_URL:'), echo=True)
 session = scoped_session(sessionmaker(bind=engine))
 
 
