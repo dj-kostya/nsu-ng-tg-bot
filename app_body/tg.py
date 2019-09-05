@@ -25,6 +25,11 @@ def start_command(message):
         print(rows)
         msg = bot.reply_to(message, """\
         Привет, кажется ты еще не зарегистрирован
-        What's your name?
+        Выбери свою группу:
+        """+'\n'.join(
+            [
+                '{id} - > {name}'.format(id=group.id, name=group.name) for group in rows
+            ]
+        )+"""
         """)
         bot.register_next_step_handler(msg, process_group_step)
