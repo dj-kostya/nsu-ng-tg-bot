@@ -178,7 +178,7 @@ def main_page(m):
         get_all_stat(m)
     elif m.text == 'Сколько мне еще бегать?':
         print(admin_group.id, user.id_group)
-        total_run = db.session.query(func.sum(db.RunHistory.total).label("total")).first
+        total_run = db.session.query(func.sum(db.RunHistory.total).label("total")).first()
         msg = bot.send_message(tg_id, "Сколько км {appeal} осталось пробежать: {total} км. !".format(
             appeal='вам' if user.id_group == admin_group.id else 'тебе',
             total=Contants.RUN_ALL - total_run[0]),
