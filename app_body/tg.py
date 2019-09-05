@@ -127,7 +127,7 @@ def get_all_stat(m):
               ['за месяц', 'за неделю',
                'за сегодня', 'за все время', 'Вернуться на главную!']])
         dt = datetime.now()
-        if m.text == 'Получить свою статистику' or m.text == 'за сегодня':
+        if m.text == 'Получить статистику' or m.text == 'за сегодня':
             start = dt.replace(hour=0, minute=0, second=0, microsecond=0)
             end = start + timedelta(days=1) - timedelta(seconds=1)
         elif m.text == 'за неделю':
@@ -151,7 +151,7 @@ def get_all_stat(m):
                                    total=row[0] if row[0] else 0, max=row[1] if row[1] else 0,
                                    start_dt=start.strftime('%Y-%m-%d'), end_dt=end.strftime('%Y-%m-%d'))
                                , reply_markup=keyboard)
-        bot.register_next_step_handler(msg, get_user_stat)
+        bot.register_next_step_handler(msg, get_all_stat)
     elif m.text == 'Вернуться на главную!':
         start_command(m)
     else:
