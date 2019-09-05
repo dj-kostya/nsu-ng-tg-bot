@@ -1,3 +1,4 @@
+import calendar
 from datetime import datetime, timedelta
 
 from app_body import Contants, db
@@ -81,34 +82,27 @@ def main_page(m):
         msg = bot.send_message(tg_id, "Сколько км ты пробежал за сегодня? ",
                                reply_markup=keyboard)
         bot.register_next_step_handler(msg, save_run)
-    elif m.text == 'Получить свою статистику' or m.text == 'за сегодня':
-        keyboard = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
-        keyboard.add(
-            *[telebot.types.KeyboardButton(name) for name in
-              ['за месяц', 'за неделю',
-               'за сегодня', 'за все время', 'Вернуться на главную!']])
 
-        row = db.session.query(func.sum(db.RunHistory.total).label("total"),
-                               func.max(db.RunHistory.total).label("max")).filter(
-            and_(
-                db.RunHistory.sh_dt >= datetime.now().replace(hour=0, minute=0, second=0, microsecond=0),
-                db.RunHistory.id_user == user.id
-            )).first()
-
-        msg = bot.send_message(tg_id,
-                               "За сегодня ты пробежал: {total} км\nИз них максимальная дистанция: {max} км".format(
-                                   total=row[0] if row[0] else 0, max=row[1] if row[1] else 0),
-                               reply_markup=keyboard)
-        bot.register_next_step_handler(msg, main_page)
-    elif m.text == 'за неделю':
+    if m.text == 'Получить свою статистику' or m.text == 'за сегодня' or m.text == 'за неделю' or m.text == 'за месяц' \
+            or m.text == 'за все время':
         keyboard = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
         keyboard.add(
             *[telebot.types.KeyboardButton(name) for name in
               ['за месяц', 'за неделю',
                'за сегодня', 'за все время', 'Вернуться на главную!']])
         dt = datetime.now()
-        start = dt - timedelta(days=dt.weekday())
-        end = start + timedelta(days=6)
+        if m.text == 'Получить свою статистику' or m.text == 'за сегодня':
+            start = dt.replace(hour=0, minute=0, second=0, microsecond=0)
+            end = start + timedelta(days=1) - timedelta(seconds=1)
+        elif m.text == 'за неделю':
+            start = dt - timedelta(days=dt.weekday())
+            end = start + timedelta(days=6)
+        elif m.text == 'за месяц':
+            start = dt.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+            end = start + timedelta(days=calendar.monthrange(dt.year, dt.month)[1] - 1)
+        else:
+            start = dt.replace(year=2000)
+            end = dt.replace(year=3000)
         row = db.session.query(func.sum(db.RunHistory.total).label("total"),
                                func.max(db.RunHistory.total).label("max")).filter(
             and_(and_(
