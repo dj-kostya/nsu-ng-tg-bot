@@ -162,9 +162,10 @@ def get_all_stat(m):
 def main_page(m):
     tg_id = m.from_user.id
     user = db.Users.query.filter_by(tg_id=tg_id).first()
+    keyboard = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
+    keyboard.add(*[telebot.types.KeyboardButton(name) for name in ['Вернуться на главную!']])
     if m.text == 'Я побегал!':
-        keyboard = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
-        keyboard.add(*[telebot.types.KeyboardButton(name) for name in ['Вернуться на главную!']])
+
         msg = bot.send_message(tg_id, "Сколько км {appeal} пробежал за сегодня? ".format(appeal='вы' if user.id_group == admin_group.id else 'ты'),
                                reply_markup=keyboard)
         bot.register_next_step_handler(msg, save_run)
@@ -173,10 +174,13 @@ def main_page(m):
         get_user_stat(m)
     elif m.text == 'Получить статистику':
         get_all_stat(m)
-    elif m.text == ''
+    elif m.text == 'Сколько мне еще бегать?':
+        total_run = db.session.query(func.sum(db.RunHistory.total).label("total")).first
+        msg = bot.send_message(tg_id, "Сколько км {appeal} осталось пробежать: {total} км. !".format(
+            appeal='вам' if user.id_group == admin_group.id else 'тебе', total=Contants.RUN_ALL - total_run[0]),
+                               reply_markup=keyboard)
+        bot.register_next_step_handler(msg, save_run)
     else:
-        keyboard = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
-        keyboard.add(*[telebot.types.KeyboardButton(name) for name in ['Вернуться на главную!']])
         msg = bot.send_message(tg_id, "По-моему, {appeal}!".format(appeal='вы ошиблись' if user.id_group == admin_group.id else 'ты ошибся'),
                                reply_markup=keyboard)
         bot.register_next_step_handler(msg, start_command)
