@@ -85,8 +85,9 @@ def main_page(m):
 
         row = db.session.query(func.sum(db.RunHistory.total).label("total"),
                                func.max(db.RunHistory.total).label("max")).filter(
-            db.RunHistory.sh_dt >= datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)).all()
-        print(row)
-        msg = bot.send_message(tg_id, "Сколько км ты пробежал за сегодня? ",
+            db.RunHistory.sh_dt >= datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)).first()
+
+        msg = bot.send_message(tg_id, "За сегодня ты пробежал: {total} км\nИз них максимальная дистанция: {max}".format(
+            total=row[0], max=row[1]),
                                reply_markup=keyboard)
         bot.register_next_step_handler(msg, save_run)
