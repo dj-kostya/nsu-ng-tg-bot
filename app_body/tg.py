@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from app_body import Contants, db
 
@@ -86,7 +86,7 @@ def main_page(m):
         keyboard.add(
             *[telebot.types.KeyboardButton(name) for name in
               ['за месяц', 'за неделю',
-               'за сегодня', 'за конкретный день', 'Вернуться на главную!']])
+               'за сегодня', 'за все время', 'Вернуться на главную!']])
 
         row = db.session.query(func.sum(db.RunHistory.total).label("total"),
                                func.max(db.RunHistory.total).label("max")).filter(
@@ -97,6 +97,29 @@ def main_page(m):
 
         msg = bot.send_message(tg_id,
                                "За сегодня ты пробежал: {total} км\nИз них максимальная дистанция: {max} км".format(
-                                   total=row[0] if row[0] else 0, max=row[1]if row[1] else 0),
+                                   total=row[0] if row[0] else 0, max=row[1] if row[1] else 0),
+                               reply_markup=keyboard)
+        bot.register_next_step_handler(msg, save_run)
+    elif m.text == 'за неделю':
+        keyboard = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
+        keyboard.add(
+            *[telebot.types.KeyboardButton(name) for name in
+              ['за месяц', 'за неделю',
+               'за сегодня', 'за все время', 'Вернуться на главную!']])
+        dt = datetime.now()
+        start = dt - timedelta(days=dt.weekday())
+        end = start + timedelta(days=6)
+        row = db.session.query(func.sum(db.RunHistory.total).label("total"),
+                               func.max(db.RunHistory.total).label("max")).filter(
+            and_(and_(
+                db.RunHistory.sh_dt >= start, db.RunHistory.sh_dt <= end),
+                db.RunHistory.id_user == user.id
+            )).first()
+
+        msg = bot.send_message(tg_id,
+                               "За период с {start_dt} по {end_dt} ты пробежал: {total} км\n"
+                               "Из них максимальная дистанция: {max} км".format(
+                                   total=row[0] if row[0] else 0, max=row[1] if row[1] else 0,
+                                   start_dt=start.strftime('%Y-%m-%d'), end_dt=end.strftime('%Y-%m-%d'), ),
                                reply_markup=keyboard)
         bot.register_next_step_handler(msg, save_run)
