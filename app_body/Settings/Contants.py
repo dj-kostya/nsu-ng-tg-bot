@@ -3,5 +3,5 @@ FLASK_DEFAULT_PORT = '80'
 
 TG_BOT_TOKEN = '975516527:AAHMx6HKuuvKoeqe6S2PRcA519ZVG_s0EWE'
 
-WEBHOOK_URL = ''
+WEBHOOK_URL = 'https://hidden-oasis-74904.herokuapp.com'
 WEBHOOK_PATH = '/%s/' % TG_BOT_TOKEN
