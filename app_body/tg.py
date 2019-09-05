@@ -10,4 +10,3 @@ def start_command(message):
     print('message')
 
 
-bot.polling()
