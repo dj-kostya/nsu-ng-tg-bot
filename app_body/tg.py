@@ -44,7 +44,7 @@ def start_command(message):
         bot.register_next_step_handler(msg, process_group_step)
     keyboard = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
     keyboard.add(*[telebot.types.KeyboardButton(name) for name in ['Я побегал!', 'Получить свою статистику']])
-    admin_group = db.Groups.query.filter_by(name='Преподаватели').first()
+    admin_group = db.session.query.filter_by(name='Преподаватели').first()
     if row.id_group == admin_group.id:
         keyboard.add(*[telebot.types.KeyboardButton(name) for name in ['Получить статистику']])
     msg = bot.send_message(tg_id, "Привет, {name}!\nЧем займемся сегодня?".format(name=row.tg_username),
