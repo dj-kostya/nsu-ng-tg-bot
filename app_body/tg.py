@@ -13,7 +13,7 @@ def process_group_step(message):
         bot.register_next_step_handler(msg, process_group_step)
         return
     if not db.Groups.find(int(text)):
-        msg = bot.send_message(chat_id, 'Не верная группа')
+        msg = bot.send_message(chat_id, 'Неверная группа')
         bot.register_next_step_handler(msg, process_group_step)
         return
     user = db.Users.create(tg_username=message.from_user.username, tg_id=message.from_user.id, id_role=int(text),
@@ -31,7 +31,7 @@ def start_command(message):
     print(tg_id)
     row = db.Users.query.filter_by(tg_id=tg_id).first()
     if not row:
-        rows = db.Groups.create()
+        rows = db.Groups.all()
         msg = bot.send_message(tg_id, "\
                         Привет, кажется ты еще не зарегистрирован\nВыбери свою группу:\n" + '\n'.join(
             [
