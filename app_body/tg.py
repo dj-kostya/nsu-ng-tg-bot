@@ -104,7 +104,7 @@ def get_user_stat(m):
                 db.RunHistory.sh_dt >= start, db.RunHistory.sh_dt <= end),
                 db.RunHistory.id_user == user.id
             )).first()
-
+        global admin_group
         msg = bot.send_message(tg_id,
                                "За период с {start_dt} по {end_dt} {appeal}: {total} км\n"
                                "Из них максимальная дистанция: {max} км".format(
@@ -163,6 +163,7 @@ def get_all_stat(m):
 
 @bot.message_handler(content_types=['text'])
 def main_page(m):
+    global admin_group
     tg_id = m.from_user.id
     user = db.Users.query.filter_by(tg_id=tg_id).first()
     keyboard = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
