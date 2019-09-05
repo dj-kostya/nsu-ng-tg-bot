@@ -95,7 +95,8 @@ def main_page(m):
                 db.RunHistory.id_user == user.id
             )).first()
 
-        msg = bot.send_message(tg_id, "За сегодня ты пробежал: {total} км\nИз них максимальная дистанция: {max} км".format(
-            total=row[0], max=row[1]),
+        msg = bot.send_message(tg_id,
+                               "За сегодня ты пробежал: {total} км\nИз них максимальная дистанция: {max} км".format(
+                                   total=row[0] if row[0] else 0, max=row[1]if row[1] else 0),
                                reply_markup=keyboard)
         bot.register_next_step_handler(msg, save_run)
