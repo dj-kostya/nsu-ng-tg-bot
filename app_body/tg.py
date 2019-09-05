@@ -15,6 +15,7 @@ def process_group_step(message):
 
 @bot.message_handler(commands=['start'])
 def start_command(message):
+    print(message)
     tg_id = message['from_user']['id']
     row = db.Users.query.filter_by(tg_id=tg_id).first()
     if not row:
