@@ -56,7 +56,10 @@ def save_run(m):
     tg_id = m.from_user.id
     text = m.text.replace(',', '.')
     user = db.Users.query.filter_by(tg_id=tg_id).first()
-    total = float(text)
+    try:
+        total = float(text)
+    except ValueError:
+        total = None
     if m.text == 'Вернуться на главную!':
         start_command(m)
     elif total:
