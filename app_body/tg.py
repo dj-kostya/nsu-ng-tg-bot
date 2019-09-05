@@ -1,7 +1,7 @@
 import calendar
 from datetime import datetime, timedelta
 
-from app_body import Contants, db, admin_group
+from app_body import Contants, db
 
 import telebot
 from sqlalchemy.sql import func, and_
