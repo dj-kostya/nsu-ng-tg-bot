@@ -30,10 +30,7 @@ def process_group_step(message):
 
 @bot.message_handler(commands=['start'])
 def start_command(message):
-    print(message, message.from_user)
-    print(type(message), type(message.from_user))
     tg_id = message.from_user.id
-    print(tg_id)
     row = db.Users.query.filter_by(tg_id=tg_id).first()
     if not row:
         rows = db.Groups.all()
@@ -180,6 +177,7 @@ def main_page(m):
     elif m.text == 'Получить статистику':
         get_all_stat(m)
     elif m.text == 'Сколько мне еще бегать?':
+        print(admin_group)
         total_run = db.session.query(func.sum(db.RunHistory.total).label("total")).first
         msg = bot.send_message(tg_id, "Сколько км {appeal} осталось пробежать: {total} км. !".format(
             appeal='вам' if user.id_group == admin_group.id else 'тебе', total=Contants.RUN_ALL - total_run[0]),
