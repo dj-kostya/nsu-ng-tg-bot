@@ -16,8 +16,7 @@ def process_group_step(message):
         msg = bot.send_message(chat_id, 'Неверная группа')
         bot.register_next_step_handler(msg, process_group_step)
         return
-    user = db.Users.create(tg_username=message.from_user.username, tg_id=message.from_user.id, id_role=int(text),
-                           id_group=1)
+    user = db.Users.create(tg_username=message.from_user.username, tg_id=message.from_user.id, id_role=int(text))
     db.commit()
     msg = bot.send_message(chat_id, 'Я все созхранил')
     bot.register_next_step_handler(msg, start_command)
