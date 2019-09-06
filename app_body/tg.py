@@ -179,15 +179,15 @@ def main_page(m):
     elif m.text == 'Сколько мне еще бегать?':
         print(admin_group.id, user.id_group)
         total_run = db.session.query(func.sum(db.RunHistory.total).label("total")).first()
-        if Contants.RUN_ALL - total_run[0] <= 0:
+        total_run = total_run[0] if total_run[0] else 0
+        if Contants.RUN_ALL - total_run <= 0:
             msg = bot.send_message(tg_id, "Ура цель достигнута, мы пробежали сверх: {total} км !!!!!".format(
                 appeal='вам' if user.id_group == admin_group.id else 'тебе',
-                total=abs(Contants.RUN_ALL - total_run[0])),
+                total=abs(Contants.RUN_ALL - total_run)),
                                    reply_markup=keyboard)
         else:
-            msg = bot.send_message(tg_id, "{appeal} осталось пробежать: {total} км. !".format(
-                appeal='Вам' if user.id_group == admin_group.id else 'Тебе',
-                total=Contants.RUN_ALL - total_run[0]),
+            msg = bot.send_message(tg_id, "Вам осталось пробежать: {total} км. !".format(
+                total=Contants.RUN_ALL - total_run),
                                    reply_markup=keyboard)
         bot.register_next_step_handler(msg, start_command)
     else:
