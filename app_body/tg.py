@@ -81,6 +81,8 @@ def save_run(m):
 def get_user_stat(m):
     tg_id = m.from_user.id
     user = db.Users.query.filter_by(tg_id=tg_id).first()
+    user.next_req + timedelta(seconds=0.3)
+    db.commit()
     if m.text == 'Получить свою статистику' or m.text == 'за сегодня' or m.text == 'за неделю' or m.text == 'за месяц' \
             or m.text == 'за все время':
         keyboard = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
