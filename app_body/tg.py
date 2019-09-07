@@ -47,6 +47,7 @@ def start_command(message):
         return
     row.tg_username = message.from_user.username if message.from_user.username else message.from_user.id
     row.next_req + timedelta(seconds=0.3)
+    db.commit()
     keyboard = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
     keyboard.add(*[telebot.types.KeyboardButton(name) for name in
                    ['Я побегал!', 'Получить свою статистику', 'Сколько мне еще бегать?']])
