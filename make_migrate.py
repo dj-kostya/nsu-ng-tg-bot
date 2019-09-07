@@ -28,7 +28,6 @@ if __name__ == '__main__':
     if args.drop:
 
         #db.drop_all()
-        db.set_session()
         db.create_all()
     db.set_session()
     if args.drop_data:
