@@ -236,6 +236,6 @@ def init():
 @bot.message_handler(content_types=['text'])
 def get_msg(m):
     tg_id = m.from_user.id
-    print(type(m))
-    if tg_id not in bot.next_step_handlers:
-        start_command(m)
+    if '/start' not in m.json:
+        if tg_id not in bot.next_step_handlers:
+            start_command(m)
