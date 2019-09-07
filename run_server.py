@@ -2,7 +2,8 @@ import argparse
 from socket import SocketIO
 
 from app_body import app, Contants, debug, init
-socketio = SocketIO(app)
+
+socketio = SocketIO(app, mode='eventlet')
 if __name__ == '__main__':
     print('start')
     parser = argparse.ArgumentParser()
@@ -12,6 +13,7 @@ if __name__ == '__main__':
     init()
     if not debug:
         from app_body import bot
+
         bot.remove_webhook()
-        bot.set_webhook(url=Contants.WEBHOOK_URL+Contants.WEBHOOK_PATH)
-    socketio.run(host=Contants.FLASK_HOST, port=port, debug=debug, app=app, mode='eventlet')
+        bot.set_webhook(url=Contants.WEBHOOK_URL + Contants.WEBHOOK_PATH)
+    socketio.run(host=Contants.FLASK_HOST, port=port, debug=debug, app=app)

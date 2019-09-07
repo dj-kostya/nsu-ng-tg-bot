@@ -11,3 +11,4 @@ sqlalchemy-mixins==1.1
 typing==3.7.4.1
 Werkzeug==0.15.6
 psycopg2
+eventlet
