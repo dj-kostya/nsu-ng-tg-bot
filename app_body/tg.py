@@ -229,5 +229,10 @@ def init():
 
 @bot.message_handler(content_types=['text'])
 def get_msg(m):
-    if m.text != 'start':
-        start_command(m)
+    tg_id = m.from_user.id
+    user = db.Users.query.filter_by(tg_id=tg_id).first()
+    if user.next_req > datetime.now():
+        return
+    user.query.filter_by(tg_id=tg_id).update({'next_req': user.next_req + timedelta(seconds=0.3)})
+    db.commit()
+    start_command(m)
