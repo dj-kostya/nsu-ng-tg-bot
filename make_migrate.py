@@ -26,7 +26,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
     if args.drop:
 
-        db.drop_all()
+        #db.drop_all()
         db.create_all()
     db.set_session()
     if args.drop_data:
