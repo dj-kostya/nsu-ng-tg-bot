@@ -28,7 +28,6 @@ def process_group_step(message):
     start_command(message)
 
 
-@bot.message_handler(content_types=['text'])
 @bot.message_handler(commands=['start'])
 def start_command(message):
     tg_id = message.from_user.id
