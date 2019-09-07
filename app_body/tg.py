@@ -83,7 +83,7 @@ def get_user_stat(m):
     user = db.Users.query.filter_by(tg_id=tg_id).first()
     if user.next_req > datetime.now():
         return
-    user.next_req + timedelta(seconds=0.3)
+    user.query.filter_by(tg_id=tg_id).update({'next_req': user.next_req + timedelta(seconds=0.3)})
     db.commit()
     if m.text == 'Получить свою статистику' or m.text == 'за сегодня' or m.text == 'за неделю' or m.text == 'за месяц' \
             or m.text == 'за все время':
