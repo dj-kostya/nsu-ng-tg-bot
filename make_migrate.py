@@ -24,6 +24,7 @@ if __name__ == '__main__':
     parser.add_argument("--drop", action="store_true", dest='drop')
     parser.add_argument("--drop-data", action="store_true", dest='drop_data')
     args = parser.parse_args()
+    print(args.drop)
     if args.drop:
 
         #db.drop_all()
