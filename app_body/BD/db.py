@@ -54,6 +54,7 @@ class Users(BaseModel):
     sh_dt = sa.Column(sa.DateTime, default=datetime.now())
     # id_role = sa.Column(sa.Integer, sa.ForeignKey('Roles.id'))
     id_group = sa.Column(sa.Integer, sa.ForeignKey('Groups.id'))
+    next_req = sa.Column(sa.DateTime, default=datetime.now())
 
 
 class RunHistory(BaseModel):

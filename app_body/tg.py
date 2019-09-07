@@ -33,6 +33,7 @@ def process_group_step(message):
 def start_command(message):
     tg_id = message.from_user.id
     row = db.Users.query.filter_by(tg_id=tg_id).first()
+
     if not row:
         rows = db.Groups.all()
         msg = bot.send_message(tg_id, "\
@@ -43,6 +44,10 @@ def start_command(message):
             ]
         ))
         bot.register_next_step_handler(msg, process_group_step)
+    if row.next_req > datetime.now():
+        return
+    row.tg_username = message.from_user.username if message.from_user.username else message.from_user.id
+    row.next_req + timedelta(seconds=0.3)
     keyboard = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
     keyboard.add(*[telebot.types.KeyboardButton(name) for name in
                    ['Я побегал!', 'Получить свою статистику', 'Сколько мне еще бегать?']])
@@ -163,6 +168,7 @@ def main_page(m):
     global admin_group
     tg_id = m.from_user.id
     user = db.Users.query.filter_by(tg_id=tg_id).first()
+    user.
     keyboard = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
     keyboard.add(*[telebot.types.KeyboardButton(name) for name in ['Вернуться на главную!']])
     if m.text == 'Я побегал!':
