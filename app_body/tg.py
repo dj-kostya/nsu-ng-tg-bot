@@ -65,6 +65,8 @@ def save_run(m):
     tg_id = m.from_user.id
     text = m.text.replace(',', '.')
     user = db.Users.query.filter_by(tg_id=tg_id).first()
+    if not user:
+        start_command(m)
     if user.next_req > datetime.now():
         return
     user.query.filter_by(tg_id=tg_id).update({'next_req': user.next_req + timedelta(seconds=0.3)})
@@ -88,6 +90,8 @@ def save_run(m):
 def get_user_stat(m):
     tg_id = m.from_user.id
     user = db.Users.query.filter_by(tg_id=tg_id).first()
+    if not user:
+        start_command(m)
     if user.next_req > datetime.now():
         return
     user.query.filter_by(tg_id=tg_id).update({'next_req': user.next_req + timedelta(seconds=0.3)})
@@ -136,6 +140,8 @@ def get_user_stat(m):
 def get_all_stat(m):
     tg_id = m.from_user.id
     user = db.Users.query.filter_by(tg_id=tg_id).first()
+    if not user:
+        start_command(m)
     if user.next_req > datetime.now():
         return
     user.query.filter_by(tg_id=tg_id).update({'next_req': user.next_req + timedelta(seconds=0.3)})
@@ -230,5 +236,6 @@ def init():
 @bot.message_handler(content_types=['text'])
 def get_msg(m):
     tg_id = m.from_user.id
+    print(type(m))
     if tg_id not in bot.next_step_handlers:
         start_command(m)
