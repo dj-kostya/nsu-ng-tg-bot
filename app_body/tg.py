@@ -132,6 +132,7 @@ def get_all_stat(m):
     if user.next_req > datetime.now():
         return
     user.next_req + timedelta(seconds=0.3)
+    print(type(user))
     db.commit()
     if m.text == 'Получить статистику' or m.text == 'за сегодня' or m.text == 'за неделю' or m.text == 'за месяц' \
             or m.text == 'за все время':
