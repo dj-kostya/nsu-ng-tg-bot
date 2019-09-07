@@ -132,7 +132,6 @@ def get_all_stat(m):
     if user.next_req > datetime.now():
         return
     user.next_req + timedelta(seconds=0.3)
-    print(type(user))
     db.commit()
     if m.text == 'Получить статистику' or m.text == 'за сегодня' or m.text == 'за неделю' or m.text == 'за месяц' \
             or m.text == 'за все время':
@@ -177,6 +176,7 @@ def main_page(m):
     global admin_group
     tg_id = m.from_user.id
     user = db.Users.query.filter_by(tg_id=tg_id).first()
+    print(type(user))
     if user.next_req > datetime.now():
         return
     user.next_req + timedelta(seconds=0.3)
