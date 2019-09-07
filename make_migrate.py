@@ -27,12 +27,12 @@ if __name__ == '__main__':
     print(args.drop)
     if args.drop:
 
-        #db.drop_all()
+        db.drop_all()
         db.create_all()
     db.set_session()
     if args.drop_data:
         db.RunHistory.query.delete()
         db.commit()
-    #create_groups()
-    #create_permission()
+    create_groups()
+    create_permission()
     db.commit()
