@@ -237,5 +237,6 @@ def init():
 def get_msg(m):
     tg_id = m.from_user.id
     if '/start' not in m.json:
+        print(bot.next_step_handlers)
         if tg_id not in bot.next_step_handlers:
             start_command(m)
