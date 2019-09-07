@@ -73,7 +73,7 @@ if debug:
     engine = sa.create_engine('sqlite:///' + os.path.join(abs_path, 'sqlite/app_body.db'), echo=True)
 else:
     engine = sa.create_engine(os.environ.get('DATABASE_URL'), echo=True)
-session = scoped_session(sessionmaker(bind=engine))
+session = None
 
 
 def commit():
@@ -97,4 +97,6 @@ def create_all():
 
 
 def set_session():
+    global session
+    session = scoped_session(sessionmaker(bind=engine))
     BaseModel.set_session(session)
