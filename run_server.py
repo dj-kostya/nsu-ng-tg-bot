@@ -3,7 +3,6 @@ from socket import SocketIO
 
 from app_body import app, Contants, debug, init
 
-socketio = SocketIO(app, mode='eventlet')
 if __name__ == '__main__':
     print('start')
     parser = argparse.ArgumentParser()
@@ -16,4 +15,4 @@ if __name__ == '__main__':
 
         bot.remove_webhook()
         bot.set_webhook(url=Contants.WEBHOOK_URL + Contants.WEBHOOK_PATH)
-    socketio.run(host=Contants.FLASK_HOST, port=port, debug=debug, app=app)
+    app.run(host=Contants.FLASK_HOST, port=port, debug=debug)
