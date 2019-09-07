@@ -14,4 +14,4 @@ if __name__ == '__main__':
         from app_body import bot
         bot.remove_webhook()
         bot.set_webhook(url=Contants.WEBHOOK_URL+Contants.WEBHOOK_PATH)
-    socketio.run(host=Contants.FLASK_HOST, port=port, debug=debug, app=app)
+    socketio.run(host=Contants.FLASK_HOST, port=port, debug=debug, app=app, mode='eventlet')
