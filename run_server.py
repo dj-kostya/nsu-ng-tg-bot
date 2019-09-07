@@ -1,7 +1,7 @@
 import argparse
 from socket import SocketIO
 
-from app_body import app, Contants, debug
+from app_body import app, Contants, debug, init
 socketio = SocketIO(app)
 if __name__ == '__main__':
     print('start')
@@ -9,6 +9,7 @@ if __name__ == '__main__':
     parser.add_argument('port', help='an integer for the accumulator', action='store')
     args = parser.parse_args()
     port = args.port
+    init()
     if not debug:
         from app_body import bot
         bot.remove_webhook()
