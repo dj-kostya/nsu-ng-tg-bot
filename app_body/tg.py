@@ -204,3 +204,9 @@ admin_group = None
 def init():
     global admin_group
     admin_group = db.Groups.query.filter_by(name='Преподаватели').first()
+
+
+@bot.message_handler(content_types=['text'])
+def get_msg(m):
+    if m.text != 'start':
+        start_command(m)
