@@ -33,6 +33,6 @@ if __name__ == '__main__':
     if args.drop_data:
         db.RunHistory.query.delete()
         db.commit()
-    create_groups()
-    create_permission()
+    #create_groups()
+    #create_permission()
     db.commit()

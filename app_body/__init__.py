@@ -9,4 +9,4 @@ from .tg import bot, init
 from .routes import app
 debug = os.environ.get('DATABASE_URL') is None
 db.set_session()
-init()
+#init()
