@@ -26,7 +26,7 @@ def webhook():
         date = int(json_['message']['date'])
         global messages
         if chat_id in messages:
-            if messages[chat_id] < date:
+            if messages[chat_id] >= date:
                 return ''
         messages[chat_id]=date
         print(chat_id, date)
