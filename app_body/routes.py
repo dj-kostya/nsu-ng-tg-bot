@@ -31,7 +31,6 @@ def webhook():
             if messages and messages[chat_id]['date'] >= date \
                     and ('text' not in json_['message'] or json_['message']['text'] == messages[chat_id]['data']):
                 return ''
-
         user = db.Users.query.filter_by(tg_id=json_['message']['from']['id']).first()
         if user:
             if user.next_req > datetime.now():
