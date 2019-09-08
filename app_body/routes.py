@@ -26,9 +26,9 @@ def webhook():
         date = int(json_['message']['date'])
         global messages
         if chat_id in messages:
-            if messages[chat_id] >= date:
+            if messages[chat_id]['date'] >= date and messages[chat_id]['data'] == chat['text']:
                 return ''
-        messages[chat_id]=date
+        messages[chat_id] = dict(date=date, data=chat['text'])
         print(chat_id, date)
         update = telebot.types.Update.de_json(json_string)
         bot.process_new_updates([update])
