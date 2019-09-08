@@ -21,9 +21,9 @@ def webhook():
     if request.headers.get('content-type') == 'application/json':
         json_string = request.get_data().decode('utf-8')
         json_ = json.loads(json_string)
-        chat = json_string['message']['chat']
-        chat_id = json_string['message']['chat']['id']
-        date = json_string['message']['date']
+        chat = json_['message']['chat']
+        chat_id = chat['id']
+        date = json_['message']['date']
         print(chat_id, date)
         update = telebot.types.Update.de_json(json_string)
         bot.process_new_updates([update])
