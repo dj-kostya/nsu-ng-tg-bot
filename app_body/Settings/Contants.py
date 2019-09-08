@@ -1,7 +1,9 @@
+import os
+
 FLASK_HOST = '0.0.0.0'
 FLASK_DEFAULT_PORT = '80'
 
-TG_BOT_TOKEN = '975516527:AAHMx6HKuuvKoeqe6S2PRcA519ZVG_s0EWE'
+TG_BOT_TOKEN = os.environ.get('TG_TOKEN')
 
 WEBHOOK_URL = 'https://hidden-oasis-74904.herokuapp.com'
 WEBHOOK_PATH = '/%s/' % TG_BOT_TOKEN
