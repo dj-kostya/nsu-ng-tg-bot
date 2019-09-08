@@ -32,10 +32,6 @@ def process_group_step(message):
 def start_command(message):
     tg_id = message.from_user.id
     user = db.Users.query.filter_by(tg_id=tg_id).first()
-    if user.next_req > datetime.now():
-        return
-    user.query.filter_by(tg_id=tg_id).update({'next_req': user.next_req + timedelta(seconds=0.3)})
-    db.commit()
     if not user:
         rows = db.Groups.all()
         msg = bot.send_message(tg_id, "\
@@ -46,11 +42,6 @@ def start_command(message):
             ]
         ))
         bot.register_next_step_handler(msg, process_group_step)
-    if user.next_req > datetime.now():
-        return
-    user.tg_username = message.from_user.username if message.from_user.username else message.from_user.id
-    user.next_req + timedelta(seconds=0.3)
-    db.commit()
     keyboard = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
     keyboard.add(*[telebot.types.KeyboardButton(name) for name in
                    ['Я побегал!', 'Получить свою статистику', 'Сколько мне еще бегать?']])
@@ -65,12 +56,6 @@ def save_run(m):
     tg_id = m.from_user.id
     text = m.text.replace(',', '.')
     user = db.Users.query.filter_by(tg_id=tg_id).first()
-    if not user:
-        start_command(m)
-    if user.next_req > datetime.now():
-        return
-    user.query.filter_by(tg_id=tg_id).update({'next_req': user.next_req + timedelta(seconds=0.3)})
-    db.commit()
     try:
         total = float(text)
     except ValueError:
@@ -90,12 +75,6 @@ def save_run(m):
 def get_user_stat(m):
     tg_id = m.from_user.id
     user = db.Users.query.filter_by(tg_id=tg_id).first()
-    if not user:
-        start_command(m)
-    if user.next_req > datetime.now():
-        return
-    user.query.filter_by(tg_id=tg_id).update({'next_req': user.next_req + timedelta(seconds=0.3)})
-    db.commit()
     if m.text == 'Получить свою статистику' or m.text == 'за сегодня' or m.text == 'за неделю' or m.text == 'за месяц' \
             or m.text == 'за все время':
         keyboard = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
@@ -140,13 +119,6 @@ def get_user_stat(m):
 def get_all_stat(m):
     tg_id = m.from_user.id
     user = db.Users.query.filter_by(tg_id=tg_id).first()
-    if not user:
-        start_command(m)
-    if user.next_req > datetime.now():
-        return
-    user.query.filter_by(tg_id=tg_id).update({'next_req': user.next_req + timedelta(seconds=0.3)})
-    db.commit()
-    db.commit()
     if m.text == 'Получить статистику' or m.text == 'за сегодня' or m.text == 'за неделю' or m.text == 'за месяц' \
             or m.text == 'за все время':
         keyboard = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
@@ -190,10 +162,6 @@ def main_page(m):
     global admin_group
     tg_id = m.from_user.id
     user = db.Users.query.filter_by(tg_id=tg_id).first()
-    if user.next_req > datetime.now():
-        return
-    user.query.filter_by(tg_id=tg_id).update({'next_req': user.next_req + timedelta(seconds=0.3)})
-    db.commit()
     keyboard = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
     keyboard.add(*[telebot.types.KeyboardButton(name) for name in ['Вернуться на главную!']])
     if m.text == 'Я побегал!':
