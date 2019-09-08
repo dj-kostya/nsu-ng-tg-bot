@@ -30,7 +30,7 @@ def webhook():
             if messages and messages[chat_id]['date'] >= date \
                     and ('text' not in json_['message'] or json_['message']['text'] == messages[chat_id]['data']):
                 return ''
-        messages[chat_id] = dict(date=date, data=chat['text'])
+        messages[chat_id] = dict(date=date, data=json_['message']['text'] if 'text' in json_['message'] else None)
         print(chat_id, date)
         update = telebot.types.Update.de_json(json_string)
         bot.process_new_updates([update])
