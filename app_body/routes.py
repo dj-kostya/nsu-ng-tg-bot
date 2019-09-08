@@ -1,3 +1,5 @@
+import json
+
 import telebot
 from flask import Flask, request, abort
 from app_body import bot, Contants
@@ -18,6 +20,7 @@ messages = {}
 def webhook():
     if request.headers.get('content-type') == 'application/json':
         json_string = request.get_data().decode('utf-8')
+        json_ = json.loads(json_string)
         chat = json_string['message']['chat']
         chat_id = json_string['message']['chat']['id']
         date = json_string['message']['date']
