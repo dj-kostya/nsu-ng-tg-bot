@@ -1,13 +1,13 @@
 ## Инициализация базы данных
-`python make_migrate --with-drop` - инициализация данных 
+`python make_migrate.py --with-drop` - инициализация данных 
 
-`python make_migrate --with-drop-data` - Чистка данных 
+`python make_migrate.py --with-drop-data` - Чистка данных 
 
-`python make_migrate` - базовая миграция(накат только данных)
+`python make_migrate.py` - базовая миграция(накат только данных)
 
 
 ## Запуск сервера
-`python run_server <PORT>`
+`python run_server.py <PORT>`
 
 ## Переменные окружения
 
