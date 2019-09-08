@@ -26,6 +26,7 @@ def webhook():
         print(json_['message'])
         date = int(json_['message']['date'])
         global messages
+        print('text' not in json_['message'], messages)
         if chat_id in messages:
             if messages and messages[chat_id]['date'] >= date \
                     and ('text' not in json_['message'] or json_['message']['text'] == messages[chat_id]['data']):
