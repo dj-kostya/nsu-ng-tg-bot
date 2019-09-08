@@ -23,7 +23,7 @@ def webhook():
         json_ = json.loads(json_string)
         chat = json_['message']['chat']
         chat_id = chat['id']
-        print(chat)
+        print(json_['message'])
         date = int(json_['message']['date'])
         global messages
         if chat_id in messages:
