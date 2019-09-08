@@ -35,7 +35,7 @@ def webhook():
         user = db.Users.query.filter_by(tg_id=json_['message']['from']['id']).first()
         if user.next_req > datetime.now():
             return
-        user.next_req = user.next_req + timedelta(seconds=0.3)
+        user.next_req = datetime.now() + timedelta(seconds=0.3)
         db.commit()
         messages[chat_id] = dict(date=date, data=json_['message']['text'] if 'text' in json_['message'] else None)
         update = telebot.types.Update.de_json(json_string)
