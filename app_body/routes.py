@@ -1,8 +1,10 @@
 import json
+from datetime import datetime, timedelta
 
 import telebot
 from flask import Flask, request, abort
 from app_body import bot, Contants
+from app_body.BD import db
 
 app = Flask(__name__)
 
@@ -29,6 +31,12 @@ def webhook():
             if messages and messages[chat_id]['date'] >= date \
                     and ('text' not in json_['message'] or json_['message']['text'] == messages[chat_id]['data']):
                 return ''
+
+        user = db.Users.query.filter_by(tg_id=json_['message']['from']['id']).first()
+        if user.next_req > datetime.now():
+            return
+        user.next_req = user.next_req + timedelta(seconds=0.3)
+        db.commit()
         messages[chat_id] = dict(date=date, data=json_['message']['text'] if 'text' in json_['message'] else None)
         update = telebot.types.Update.de_json(json_string)
         bot.process_new_updates([update])
