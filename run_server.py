@@ -12,7 +12,6 @@ if __name__ == '__main__':
     init()
     if not debug:
         from app_body import bot
-
         bot.remove_webhook()
         bot.set_webhook(url=Contants.WEBHOOK_URL + Contants.WEBHOOK_PATH)
     app.run(host=Contants.FLASK_HOST, port=port, debug=debug)
